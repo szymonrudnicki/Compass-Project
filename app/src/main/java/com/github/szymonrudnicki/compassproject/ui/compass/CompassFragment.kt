@@ -22,7 +22,6 @@ import kotlinx.android.synthetic.main.fragment_compass.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-
 private const val ROTATE_ANIMATION_DURATION = 250L
 private const val LOCATION_PERMISSION_REQUEST = 567
 
@@ -66,7 +65,7 @@ class CompassFragment : Fragment() {
                 LongitudeValidator(context!!.getString(R.string.longitude_error_message)))
 
         if (latitudeIsValid and longitudeIsValid) {
-            setDestination(latitude_text_view.text.toDouble(), longitude_text_view.text.toDouble())
+            setDestination(latitude_text_view.text.toString().toDouble(), longitude_text_view.text.toString().toDouble())
         }
     }
 
