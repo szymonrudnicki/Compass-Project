@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Compass Project</string>
+    <string name="location_permission_rationale">We need access to your location to calculate direction</string>
+    <string name="turn_on_gps_rationale">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="set_destination">Set destination</string>
+    <string name="latitude_error_message">Latitude should be between -90 and 90!</string>
+    <string name="longitude_error_message">Longitude should be between -180 and 180!</string>
 </resources>
