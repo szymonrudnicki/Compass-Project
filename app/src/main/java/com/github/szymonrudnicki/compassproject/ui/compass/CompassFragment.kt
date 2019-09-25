@@ -12,6 +12,8 @@ import com.github.szymonrudnicki.compassproject.R
 import com.github.szymonrudnicki.compassproject.extensions.observe
 import kotlinx.android.synthetic.main.fragment_compass.*
 
+private const val ROTATE_ANIMATION_DURATION = 250
+
 class CompassFragment : Fragment() {
 
     private var _compassDegree = 0f
@@ -43,7 +45,7 @@ class CompassFragment : Fragment() {
                 Animation.RELATIVE_TO_SELF, 0.5f
         ).apply {
             fillAfter = true
-            duration = 250
+            duration = ROTATE_ANIMATION_DURATION
         }
 
         compass_image_view.startAnimation(rotateAnimation)
