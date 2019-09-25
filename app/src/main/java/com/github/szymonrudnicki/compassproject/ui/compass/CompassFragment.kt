@@ -12,7 +12,7 @@ import com.github.szymonrudnicki.compassproject.R
 import com.github.szymonrudnicki.compassproject.extensions.observe
 import kotlinx.android.synthetic.main.fragment_compass.*
 
-private const val ROTATE_ANIMATION_DURATION = 250
+private const val ROTATE_ANIMATION_DURATION = 250L
 
 class CompassFragment : Fragment() {
 

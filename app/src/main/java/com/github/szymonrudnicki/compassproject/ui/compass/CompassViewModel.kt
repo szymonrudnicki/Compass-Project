@@ -2,6 +2,7 @@ package com.github.szymonrudnicki.compassproject.ui.compass
 
 import android.content.Context
 import android.hardware.Sensor
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.pwittchen.reactivesensors.library.ReactiveSensorFilter
@@ -15,7 +16,8 @@ class CompassViewModel : ViewModel() {
 
     private val _compositeDisposable = CompositeDisposable()
 
-    val azimuthLiveData = MutableLiveData<Float>()
+    private val _azimuthLiveData = MutableLiveData<Float>()
+    val azimuthLiveData : LiveData<Float> = _azimuthLiveData
 
     fun getCompassAzimuth(context: Context) {
         _compositeDisposable.add(
@@ -25,7 +27,7 @@ class CompassViewModel : ViewModel() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { reactiveSensorEvent ->
                             val azimuth = SensorUtils.calculateAzimuth(reactiveSensorEvent.sensorEvent)
-                            azimuthLiveData.postValue(azimuth)
+                            _azimuthLiveData.postValue(azimuth)
                         }
         )
     }
