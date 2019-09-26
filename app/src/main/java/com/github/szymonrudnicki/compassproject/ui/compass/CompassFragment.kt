@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -20,7 +19,6 @@ import com.github.szymonrudnicki.compassproject.R
 import com.github.szymonrudnicki.compassproject.extensions.observe
 import com.github.szymonrudnicki.compassproject.ui.compass.states.DestinationAzimuthState
 import com.github.szymonrudnicki.compassproject.ui.compass.states.InputState
-import com.github.szymonrudnicki.compassproject.ui.validators.LatitudeValidator
 import kotlinx.android.synthetic.main.fragment_compass.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -122,16 +120,10 @@ class CompassFragment : Fragment() {
 
     private fun setDestinationAzimuth(azimuthState: DestinationAzimuthState?) {
         when (azimuthState) {
-            is DestinationAzimuthState.Available -> Toast.makeText(
-                context,
-                azimuthState.value.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
-            is DestinationAzimuthState.Unavailable -> Toast.makeText(
-                context,
-                "HIDE!",
-                Toast.LENGTH_SHORT
-            ).show()
+            is DestinationAzimuthState.Available ->
+                destination_azimuth_text_view.text = azimuthState.value.toString()
+            is DestinationAzimuthState.Unavailable ->
+                destination_azimuth_text_view.text = "Azimuth is not available with current data!"
         }
     }
 

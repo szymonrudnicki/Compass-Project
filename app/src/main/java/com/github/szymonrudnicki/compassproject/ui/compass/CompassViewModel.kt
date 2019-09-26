@@ -3,6 +3,7 @@ package com.github.szymonrudnicki.compassproject.ui.compass
 import android.content.Context
 import android.hardware.Sensor
 import android.location.Location
+import android.location.LocationManager
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,7 +37,7 @@ class CompassViewModel : ViewModel() {
     private var _longitude by Delegates.observable<Double?>(null) {
             _, _, _ -> calculateDestinationAzimuth()
     }
-    private var _location by Delegates.observable<Location?>(null) {
+    private var _deviceLocation by Delegates.observable<Location?>(null) {
         _, _, _ -> calculateDestinationAzimuth()
     }
 
@@ -82,13 +83,18 @@ class CompassViewModel : ViewModel() {
 
     private fun updateLocation(location: Location) {
         Log.d("LOCATION_UPDATE", location.toString())
-        _location = location
+        _deviceLocation = location
     }
 
     private fun calculateDestinationAzimuth() {
-        if (_latitude != null && _longitude != null && _location != null) {
-            // todo: calculate destination azimuth
-            destinationAzimuthLiveData.postValue(DestinationAzimuthState.Available(45f))
+        if (_latitude != null && _longitude != null && _deviceLocation != null) {
+            val destinationLocation = Location(LocationManager.GPS_PROVIDER).apply {
+                latitude = _latitude!!
+                longitude = _longitude!!
+            }
+            val bearingToDestination = _deviceLocation!!.bearingTo(destinationLocation)
+            val destinationAzimuth = (bearingToDestination + 360) % 360
+            destinationAzimuthLiveData.postValue(DestinationAzimuthState.Available(destinationAzimuth))
         } else {
             destinationAzimuthLiveData.postValue(DestinationAzimuthState.Unavailable)
         }
