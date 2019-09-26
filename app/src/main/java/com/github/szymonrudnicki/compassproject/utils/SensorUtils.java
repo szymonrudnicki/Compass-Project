@@ -4,7 +4,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 
 public class SensorUtils {
-  public static float calculateAzimuth(SensorEvent event) {
+  public static double calculateAzimuth(SensorEvent event) {
     float[] rotationMatrix = new float[9];
     float[] orientation = new float[3];
 
@@ -12,7 +12,6 @@ public class SensorUtils {
     SensorManager.getOrientation(rotationMatrix, orientation);
     float azimuthInRadians = orientation[0];
     double azimuthInDegrees = Math.toDegrees(azimuthInRadians);
-    double azimuth = (azimuthInDegrees + 360) % 360;
-    return (float) azimuth;
+    return (azimuthInDegrees + 360) % 360;
   }
 }
