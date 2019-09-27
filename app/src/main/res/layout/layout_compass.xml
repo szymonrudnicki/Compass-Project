@@ -7,9 +7,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rotating_container"
-        android:layout_width="322dp"
-        android:layout_height="322dp"
-        android:layout_margin="36dp"
+        android:layout_width="326dp"
+        android:layout_height="326dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,6 +28,7 @@
             android:id="@+id/destination_azimuth_image_view"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:visibility="gone"
             android:src="@drawable/baseline_arrow_drop_down_circle_black_36"
             android:tint="@color/colorAccent"
             app:layout_constraintCircle="@id/compass_image_view"
