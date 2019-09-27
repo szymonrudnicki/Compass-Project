@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.szymonrudnicki.compassproject.R
 import com.github.szymonrudnicki.compassproject.extensions.gone
 import com.github.szymonrudnicki.compassproject.extensions.visible
-import com.github.szymonrudnicki.compassproject.ui.compass.states.DestinationAzimuthState
+import com.github.szymonrudnicki.compassproject.ui.compass.states.DestinationState
 import kotlinx.android.synthetic.main.layout_compass.view.*
 
 private const val ROTATE_ANIMATION_DURATION = 250L
@@ -23,7 +23,7 @@ class CompassView(context: Context, attributeSet: AttributeSet) : ConstraintLayo
 
     fun rotateCompass(azimuth: Double?) {
         // clockwise rotation will basically reduce the degree on the compass image
-        // that is why azimuth is not equal to degree and has to be negated
+        // that is why azimuth is not equal to animation degree and has to be negated
         val newDegree = -azimuth!!
         val rotateAnimation = RotateAnimation(
             _compassDegree.toFloat(), newDegree.toFloat(),
@@ -39,18 +39,18 @@ class CompassView(context: Context, attributeSet: AttributeSet) : ConstraintLayo
         degrees_text_view.text = "${"%.2f".format(azimuth)}°"
     }
 
-    fun setDestinationAzimuth(azimuthState: DestinationAzimuthState?) {
-        when (azimuthState) {
-            is DestinationAzimuthState.Available -> {
+    fun setDestinationAzimuth(state: DestinationState?) {
+        when (state) {
+            is DestinationState.Available -> {
                 with(destination_azimuth_image_view) {
-                    rotation = azimuthState.value
+                    rotation = state.azimuth
                     layoutParams = (layoutParams as LayoutParams).apply {
-                        circleAngle = azimuthState.value
+                        circleAngle = state.azimuth
                     }
                     visible()
                 }
             }
-            is DestinationAzimuthState.Unavailable -> destination_azimuth_image_view.gone()
+            is DestinationState.Unavailable -> destination_azimuth_image_view.gone()
         }
     }
 }

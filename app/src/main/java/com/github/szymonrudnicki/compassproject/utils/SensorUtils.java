@@ -10,6 +10,7 @@ public class SensorUtils {
 
     SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
     SensorManager.getOrientation(rotationMatrix, orientation);
+
     float azimuthInRadians = orientation[0];
     double azimuthInDegrees = Math.toDegrees(azimuthInRadians);
     return (azimuthInDegrees + 360) % 360;

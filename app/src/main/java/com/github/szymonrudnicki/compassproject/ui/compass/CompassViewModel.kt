@@ -8,11 +8,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.pwittchen.reactivesensors.library.ReactiveSensorFilter
 import com.github.pwittchen.reactivesensors.library.ReactiveSensors
-import com.github.szymonrudnicki.compassproject.ui.compass.states.DestinationAzimuthState
+import com.github.szymonrudnicki.compassproject.ui.compass.states.DestinationState
 import com.github.szymonrudnicki.compassproject.ui.compass.states.InputState
 import com.github.szymonrudnicki.compassproject.ui.validators.LatitudeValidator
 import com.github.szymonrudnicki.compassproject.ui.validators.LongitudeValidator
 import com.github.szymonrudnicki.compassproject.utils.SensorUtils
+import com.github.szymonrudnicki.compassproject.utils.formatDistance
 import io.nlopez.smartlocation.SmartLocation
 import io.nlopez.smartlocation.rx.ObservableFactory
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,7 +26,7 @@ class CompassViewModel : ViewModel() {
     private val _compositeDisposable = CompositeDisposable()
 
     val northAzimuthLiveData = MutableLiveData<Double>()
-    val destinationAzimuthLiveData = MutableLiveData<DestinationAzimuthState>()
+    val destinationLiveData = MutableLiveData<DestinationState>()
 
     val latitudeStatusLiveData = MutableLiveData<InputState>()
     val longitudeStatusLiveData = MutableLiveData<InputState>()
@@ -92,9 +93,12 @@ class CompassViewModel : ViewModel() {
             }
             val bearingToDestination = _deviceLocation!!.bearingTo(destinationLocation)
             val destinationAzimuth = (bearingToDestination + 360) % 360
-            destinationAzimuthLiveData.postValue(DestinationAzimuthState.Available(destinationAzimuth))
+            val distanceToDestination = _deviceLocation!!.distanceTo(destinationLocation)
+            destinationLiveData.postValue(
+                DestinationState.Available(destinationAzimuth, distanceToDestination.formatDistance())
+            )
         } else {
-            destinationAzimuthLiveData.postValue(DestinationAzimuthState.Unavailable)
+            destinationLiveData.postValue(DestinationState.Unavailable)
         }
     }
 

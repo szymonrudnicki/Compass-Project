@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.github.szymonrudnicki.compassproject.R
 import com.github.szymonrudnicki.compassproject.extensions.observe
-import com.github.szymonrudnicki.compassproject.ui.compass.states.DestinationAzimuthState
+import com.github.szymonrudnicki.compassproject.ui.compass.states.DestinationState
 import com.github.szymonrudnicki.compassproject.ui.compass.states.InputState
 import kotlinx.android.synthetic.main.fragment_compass.*
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -39,8 +39,9 @@ class CompassFragment : Fragment() {
         setupEditTexts()
         with(_compassViewModel) {
             getCompassAzimuth(requireContext())
+
             observe(northAzimuthLiveData, ::rotateCompass)
-            observe(destinationAzimuthLiveData, ::setDestinationAzimuth)
+            observe(destinationLiveData, ::setDestinationState)
             observe(latitudeStatusLiveData, ::setLatitudeInputState)
             observe(longitudeStatusLiveData, ::setLongitudeInputState)
         }
@@ -62,7 +63,11 @@ class CompassFragment : Fragment() {
 
     @AfterPermissionGranted(LOCATION_PERMISSION_REQUEST_CODE)
     private fun observeLocation() {
-        if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        ) {
             if (!_wasGPSStatusChecked) {
                 checkIfGPSIsTurnedOn()
                 _wasGPSStatusChecked = true
@@ -99,8 +104,14 @@ class CompassFragment : Fragment() {
         compass_view.rotateCompass(azimuth)
     }
 
-    private fun setDestinationAzimuth(azimuthState: DestinationAzimuthState?) {
-        compass_view.setDestinationAzimuth(azimuthState)
+    private fun setDestinationState(state: DestinationState?) {
+        compass_view.setDestinationAzimuth(state)
+
+        when (state) {
+            is DestinationState.Available ->
+                destination_distance_text_view.text = "${getString(R.string.distance_to_the_destination_label)} ${state.formattedDistance}"
+            is DestinationState.Unavailable -> destination_distance_text_view.text = ""
+        }
     }
 
     private fun setLatitudeInputState(inputState: InputState?) {

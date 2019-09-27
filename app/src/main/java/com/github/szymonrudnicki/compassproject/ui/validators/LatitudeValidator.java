@@ -1,9 +1,7 @@
 package com.github.szymonrudnicki.compassproject.ui.validators;
 
-import androidx.annotation.NonNull;
-
 public class LatitudeValidator {
-    public static boolean isValid(@NonNull String text) {
+    public static boolean isValid(String text) {
         double MIN_LATITUDE = -90;
         double MAX_LATITUDE = 90;
 

@@ -1,9 +1,7 @@
 package com.github.szymonrudnicki.compassproject.ui.validators;
 
-import androidx.annotation.NonNull;
-
 public class LongitudeValidator {
-    public static boolean isValid(@NonNull String text) {
+    public static boolean isValid(String text) {
         double MIN_LONGITUDE = -180;
         double MAX_LONGITUDE = 180;
 
