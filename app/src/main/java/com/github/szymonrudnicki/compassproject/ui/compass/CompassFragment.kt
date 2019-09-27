@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.github.szymonrudnicki.compassproject.R
 import com.github.szymonrudnicki.compassproject.extensions.observe
 import com.github.szymonrudnicki.compassproject.ui.compass.states.DestinationAzimuthState
@@ -27,9 +27,7 @@ class CompassFragment : Fragment() {
 
     private var _wasGPSStatusChecked = false
 
-    private val _compassViewModel: CompassViewModel by lazy {
-        ViewModelProviders.of(this).get(CompassViewModel::class.java)
-    }
+    private val _compassViewModel by viewModels<CompassViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(R.layout.fragment_compass, container, false)
@@ -37,15 +35,15 @@ class CompassFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        _compassViewModel.getCompassAzimuth(requireContext())
         observeLocation()
-
-        observe(_compassViewModel.northAzimuthLiveData, ::rotateCompass)
-        observe(_compassViewModel.destinationAzimuthLiveData, ::setDestinationAzimuth)
-        observe(_compassViewModel.latitudeStatusLiveData, ::setLatitudeInputState)
-        observe(_compassViewModel.longitudeStatusLiveData, ::setLongitudeInputState)
-
         setupEditTexts()
+        with(_compassViewModel) {
+            getCompassAzimuth(requireContext())
+            observe(northAzimuthLiveData, ::rotateCompass)
+            observe(destinationAzimuthLiveData, ::setDestinationAzimuth)
+            observe(latitudeStatusLiveData, ::setLatitudeInputState)
+            observe(longitudeStatusLiveData, ::setLongitudeInputState)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
