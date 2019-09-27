@@ -10,8 +10,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -23,12 +21,10 @@ import kotlinx.android.synthetic.main.fragment_compass.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-private const val ROTATE_ANIMATION_DURATION = 250L
 private const val LOCATION_PERMISSION_REQUEST_CODE = 1337
 
 class CompassFragment : Fragment() {
 
-    private var _compassDegree = 0.0 // move to custom view
     private var _wasGPSStatusChecked = false
 
     private val _compassViewModel: CompassViewModel by lazy {
@@ -102,29 +98,11 @@ class CompassFragment : Fragment() {
     }
 
     private fun rotateCompass(azimuth: Double?) {
-        // clockwise rotation will basically reduce the degree on the compass image
-        // that is why azimuth is not equal to degree and has to be negated
-        val newDegree = -azimuth!!
-        val rotateAnimation = RotateAnimation(
-            _compassDegree.toFloat(), newDegree.toFloat(),
-            Animation.RELATIVE_TO_SELF, 0.5f,
-            Animation.RELATIVE_TO_SELF, 0.5f
-        ).apply {
-            fillAfter = true
-            duration = ROTATE_ANIMATION_DURATION
-        }
-
-        compass_image_view.startAnimation(rotateAnimation)
-        _compassDegree = newDegree
+        compass_view.rotateCompass(azimuth)
     }
 
     private fun setDestinationAzimuth(azimuthState: DestinationAzimuthState?) {
-        when (azimuthState) {
-            is DestinationAzimuthState.Available ->
-                destination_azimuth_text_view.text = azimuthState.value.toString()
-            is DestinationAzimuthState.Unavailable ->
-                destination_azimuth_text_view.text = "Azimuth is not available with current data!"
-        }
+        compass_view.setDestinationAzimuth(azimuthState)
     }
 
     private fun setLatitudeInputState(inputState: InputState?) {

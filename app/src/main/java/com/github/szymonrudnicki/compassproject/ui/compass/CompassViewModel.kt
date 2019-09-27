@@ -4,7 +4,6 @@ import android.content.Context
 import android.hardware.Sensor
 import android.location.Location
 import android.location.LocationManager
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.pwittchen.reactivesensors.library.ReactiveSensorFilter
@@ -82,7 +81,6 @@ class CompassViewModel : ViewModel() {
     }
 
     private fun updateLocation(location: Location) {
-        Log.d("LOCATION_UPDATE", location.toString())
         _deviceLocation = location
     }
 

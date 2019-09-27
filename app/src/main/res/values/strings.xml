@@ -7,4 +7,5 @@
     <string name="set_destination">Set destination</string>
     <string name="latitude_error_message">Latitude should be between -90 and 90!</string>
     <string name="longitude_error_message">Longitude should be between -180 and 180!</string>
+    <string name="enter_coordinates_label">Enter coordinates to your destination:</string>
 </resources>
